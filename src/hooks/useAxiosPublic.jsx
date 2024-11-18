@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const axiosPublic = axios.create({
-    baseURL: 'https://www.freetestapi.com/api/v1/products'
+    baseURL: 'https://dummyjson.com'
 })
 
 const useAxiosPublic = () => {

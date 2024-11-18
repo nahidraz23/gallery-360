@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { NavLink } from "react-router-dom";
 
 const Navbar = () => {
     const [isOpen, setIsOpen] = useState(false);
@@ -64,24 +65,24 @@ const Navbar = () => {
                         }`}
                 >
                     <div className="flex flex-col px-2 -mx-4 md:flex-row md:mx-10 md:py-0">
-                        <a
-                            href="#"
+                    <NavLink
+                            to="/"
                             className="px-2.5 py-2 text-gray-700 transition-colors duration-300 transform rounded-lg dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 md:mx-2"
                         >
                             Home
-                        </a>
-                        <a
-                            href="#"
+                        </NavLink>
+                        <NavLink
+                            to="/products"
                             className="px-2.5 py-2 text-gray-700 transition-colors duration-300 transform rounded-lg dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 md:mx-2"
                         >
-                            About
-                        </a>
-                        <a
-                            href="#"
+                            Products
+                        </NavLink>
+                        <NavLink
+                            to="/contact"
                             className="px-2.5 py-2 text-gray-700 transition-colors duration-300 transform rounded-lg dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 md:mx-2"
                         >
                             Contact
-                        </a>
+                        </NavLink>
                     </div>
 
                     <div className="relative mt-4 md:mt-0">
