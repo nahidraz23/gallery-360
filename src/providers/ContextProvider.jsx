@@ -9,6 +9,8 @@ const ContextProvider = ({children}) => {
     // const products = useProducts();
 
     const contextData = {
+        loading,
+        setLoading
     }
 
     return (

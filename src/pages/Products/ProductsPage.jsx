@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import useAxiosPublic from '../../hooks/useAxiosPublic';
 import useProducts from '../../hooks/useProducts';
 import ProductCard from './ProductCard';
+import { initContext } from '../../providers/ContextProvider';
 
 const ProductsPage = () => {
     const axiosPublic = useAxiosPublic();
@@ -9,17 +10,17 @@ const ProductsPage = () => {
     const [searchText, setSearchText] = useState("");
     const [highToLow, setHighToLow] = useState(false);
     const [lowToHigh, setLowToHigh] = useState(false);
+    const { loading, setLoading } = useContext(initContext)
 
     useEffect(() => {
         const getProducts = async () => {
             const res = await axiosPublic.get('/products')
-            return setProducts(res.data.products)
+            setProducts(res.data.products)
+            setLoading(false)
         }
-
         getProducts()
-
     }, [])
-    
+
     const handleSearch = (e) => {
         const search = e.target.value.toLowerCase();
         setSearchText(search);
@@ -29,11 +30,9 @@ const ProductsPage = () => {
         if (!searchText) return;
 
         const serachedProduct = async () => {
-            await fetch(`https://dummyjson.com/products/search?q=${searchText}`)
-                .then(res => res.json())
-                .then(data => {
-                    setProducts(data.products)
-                });
+            const res = await axiosPublic.get(`https://dummyjson.com/products/search?q=${searchText}`)
+            setProducts(res.data.products);
+
         }
         serachedProduct();
     }, [searchText])
@@ -58,8 +57,6 @@ const ProductsPage = () => {
         sortHighToLow()
         sortLowToHigh()
     }, [lowToHigh, highToLow])
-
-
 
     return (
         <div className='grid grid-cols-1 lg:grid-cols-12 container mx-auto my-10 gap-10 p-4 lg:p-0'>
@@ -103,13 +100,20 @@ const ProductsPage = () => {
                         </svg>
                     </label>
                 </div>
-                <div className='container mx-auto grid grid-cols-1 lg:grid-cols-3 gap-10'>
-                    {
-                        products.map((product, index) =>
-                            <ProductCard key={index} product={product} />
-                        )
-                    }
-                </div>
+                {
+                    loading ?
+                        <div className='w-full h-screen'>
+                            <progress className="progress w-56"></progress>
+                        </div>
+                        :
+                        <div className='container mx-auto grid grid-cols-1 lg:grid-cols-3 gap-10'>
+                            {
+                                products.map((product, index) =>
+                                    <ProductCard key={index} product={product} />
+                                )
+                            }
+                        </div>
+                }
             </div>
         </div>
     );
