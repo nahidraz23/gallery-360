@@ -1,26 +1,44 @@
 import React from "react";
 import Button from "../../components/shared/Button";
 import { Link } from "react-router-dom";
+import { FaDollarSign, FaEye } from 'react-icons/fa';
+import ReactStars from "react-rating-stars-component";
 
 const ProductCard = ({ product }) => {
-    const { id, title, description, thumbnail, price, brand, images } = product;
+
+    const { id, images, title, description, price, rating, thumbnail } = product;
+
+    const ratingChanged = (newRating) => {
+        console.log(newRating);
+      };
+
     return (
-        <div className="p-6 rounded-md shadow-md dark:bg-gray-50 dark:text-gray-900">
-            <img src={images[0]} alt="" className="object-center w-full rounded-md md:h-80 dark:bg-gray-500" />
-            <div >
-                <div className="mt-6 mb-2">
-                    <span className="block text-xs font-medium tracking-widest uppercase dark:text-violet-600">{brand}</span>
+        <div className="card bg-base-100 max-w-96 shadow-xl hover:shadow-slate-300">
+            <figure>
+                <img
+                    src={images[0]}
+                    alt="Shoes"
+                    className='h-64'
+                />
+            </figure>
+            <div className="card-body">
+                <h2 className="card-title">
+                    <h1>{title}</h1>
+                </h2>
+                <p>{description}</p>
+                <div className='flex items-center'>
+                    <p className='text-xl font-medium flex items-center'><FaDollarSign className='text-green-600'></FaDollarSign>{price}</p>
+                    <ReactStars
+                        count={5}
+                        onChange={ratingChanged}
+                        size={24}
+                        activeColor="orange"
+                        edit={false}
+                        half={true}
+                        value={rating}
+                    />
                 </div>
-                <div className="flex items-center justify-between my-4">
-                    <h2 className="text-xl font-semibold tracking-wide">{title}</h2>
-                    <h2 className="text-xl font-bold">${price}</h2>
-                </div>
-            </div>
-            <p className="dark:text-gray-800">{description}</p>
-            <div className="text-center">
-                <Link to={`/productdetails/${id}`}>
-                    <Button text={"View Details"} />
-                </Link>
+                <Link to={`/productdetails/${id}`}><button className='btn btn-outline w-full'><FaEye></FaEye> View Details</button></Link>
             </div>
         </div>
     );
