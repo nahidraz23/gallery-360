@@ -102,7 +102,7 @@ const ProductsPage = () => {
                 </div>
                 {
                     loading ?
-                        <div className='w-full h-screen'>
+                        <div>
                             <progress className="progress w-56"></progress>
                         </div>
                         :
