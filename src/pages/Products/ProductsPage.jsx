@@ -10,7 +10,9 @@ const ProductsPage = () => {
     const [searchText, setSearchText] = useState("");
     const [highToLow, setHighToLow] = useState(false);
     const [lowToHigh, setLowToHigh] = useState(false);
-    const { loading, setLoading } = useContext(initContext)
+    const { loading, setLoading } = useContext(initContext);
+    const [selectedCategory, setSelectedCategory] = useState();
+    const [categories, setCategories] = useState([]);
 
     useEffect(() => {
         const getProducts = async () => {
@@ -19,6 +21,14 @@ const ProductsPage = () => {
             setLoading(false)
         }
         getProducts()
+    }, [])
+
+    useEffect(() => {
+        const getCategories = async () => {
+            const res = await axiosPublic.get('/products/category-list');
+            setCategories(res.data)
+        }
+        getCategories()
     }, [])
 
     const handleSearch = (e) => {
@@ -41,22 +51,36 @@ const ProductsPage = () => {
         const sortHighToLow = async () => {
             if (highToLow) {
                 const res = await axiosPublic.get(`https://dummyjson.com/products?sortBy=price&order=${highToLow ? 'desc ' : 'asc'}`)
-                return setProducts(res.data.products)
+                setLowToHigh(false)
+                setProducts(res.data.products)
             }
-            return;
+
+            return
         }
 
         const sortLowToHigh = async () => {
             if (lowToHigh) {
                 const res = await axiosPublic.get(`https://dummyjson.com/products?sortBy=price&order=${lowToHigh ? 'asc ' : 'desc'}`)
-                return setProducts(res.data.products)
+                setHighToLow(false)
+                setProducts(res.data.products)
             }
-            return;
+
+            return
         }
 
         sortHighToLow()
         sortLowToHigh()
     }, [lowToHigh, highToLow])
+
+    useEffect(() => {
+        if (selectedCategory) {
+            const loadByCategory = async () => {
+                const res = await axiosPublic.get(`/products/category/${selectedCategory}`)
+                setProducts(res.data.products)
+            }
+            loadByCategory()
+        }
+    }, [selectedCategory])
 
     return (
         <div className='grid grid-cols-1 lg:grid-cols-12 container mx-auto my-10 gap-10 p-4 lg:p-0'>
@@ -69,18 +93,33 @@ const ProductsPage = () => {
                         <h1 className='text-center text-white font-semibold'>Price</h1>
                     </div>
                     <div className='border-2 rounded-lg'>
-                        <div className="form-control">
+                        <div className="form-control border-b-2">
                             <label className="label cursor-pointer">
-                                <span className="label-text ">High to Low</span>
+                                <span className="label-text text-lg">High to Low</span>
                                 <input type="checkbox" onClick={() => setHighToLow(!highToLow)} className="checkbox" />
                             </label>
                         </div>
                         <div className="form-control">
                             <label className="label cursor-pointer">
-                                <span className="label-text ">Low To High</span>
+                                <span className="label-text text-lg">Low To High</span>
                                 <input type="checkbox" onClick={() => setLowToHigh(!lowToHigh)} className="checkbox" />
                             </label>
                         </div>
+                    </div>
+                </div>
+                <div className=''>
+                    <div className='bg-blue-300 py-2 rounded-lg'>
+                        <h1 className='text-center text-white font-semibold'>Categories</h1>
+                    </div>
+                    <div className='border-2 rounded-lg'>
+                        {
+                            categories.map((category) => <div className="form-control border-b-2">
+                                <label className="label cursor-pointer">
+                                    <span className="label-text text-lg">{category}</span>
+                                    <input type="checkbox" onClick={() => setSelectedCategory(category)} className="checkbox" />
+                                </label>
+                            </div>)
+                        }
                     </div>
                 </div>
             </div>

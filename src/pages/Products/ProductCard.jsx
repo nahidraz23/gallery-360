@@ -13,7 +13,7 @@ const ProductCard = ({ product }) => {
       };
 
     return (
-        <div className="card bg-base-100 max-w-96 shadow-xl hover:shadow-slate-300">
+        <div className="card bg-base-100 max-w-96 shadow-lg hover:shadow-slate-300">
             <figure>
                 <img
                     src={images[0]}
@@ -38,7 +38,7 @@ const ProductCard = ({ product }) => {
                         value={rating}
                     />
                 </div>
-                <Link to={`/productdetails/${id}`}><button className='btn btn-outline w-full'><FaEye></FaEye> View Details</button></Link>
+                <Link to={`/productdetails/${id}`}><button className='btn btn-outline w-full hover:bg-blue-600 hover:border-none'><FaEye></FaEye> View Details</button></Link>
             </div>
         </div>
     );
